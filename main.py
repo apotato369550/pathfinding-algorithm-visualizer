@@ -59,6 +59,9 @@ class Cell:
     def make_barrier(self):
         self.color = BLACK
 
+    def make_start(self):
+        self.color = ORANGE
+
     def make_end(self):
         self.color = TURQUOISE
 
@@ -81,6 +84,7 @@ def heuristic(point_1, point_2):
     return abs(x1 - x2) + abs(y1 - y2)
 
 def make_grid(rows, length):
+    # there is something wrong here
     grid = []
     gap = length // rows
     for i in range(rows):
@@ -99,8 +103,9 @@ def draw_grid(window, rows, length):
             pygame.draw.line(window, GREY, (j * gap, 0), (j * gap, length))
 
 def draw(window, grid, rows, length):
+    # there is also something wrong here
     window.fill(WHITE)
-    for cell in rows:
+    for cell in range(rows):
         cell.draw(window)
 
     draw_grid(window, rows, length)
@@ -126,6 +131,7 @@ def main(window, length):
     started = False
 
     while run:
+        draw(window, grid, ROWS, length)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -136,10 +142,21 @@ def main(window, length):
             if pygame.mouse.get_pressed()[0]:
                 position = pygame.mouse.get_pos()
                 row, column = get_clicked_position(position, ROWS, length)
-                spot = grid[row][column]
+                cell = grid[row][column]
+                if not start:
+                    start = cell
+                    start.make_start()
+
+                elif not end:
+                    end = cell
+                    end.make_end()
+
+                elif cell != end and cell != start:
+                    cell.make_barrier()
             elif pygame.mouse.get_pressed()[2]:
-                return
+                pass
 
     pygame.quit()
 
+main(WIN, LENGTH)
 # continue here
