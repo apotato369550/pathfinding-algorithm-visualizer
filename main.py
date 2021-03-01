@@ -106,4 +106,40 @@ def draw(window, grid, rows, length):
     draw_grid(window, rows, length)
     pygame.display.update()
 
+def get_clicked_position(position, rows, length):
+    gap = length // rows
+    y, x = position
+
+    row = y // gap
+    column = x //gap
+
+    return row, column
+
+def main(window, length):
+    ROWS = 50
+    grid = make_grid(ROWS, length)
+
+    start = None
+    end = None
+
+    run = True
+    started = False
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+
+            if started:
+                continue
+
+            if pygame.mouse.get_pressed()[0]:
+                position = pygame.mouse.get_pos()
+                row, column = get_clicked_position(position, ROWS, length)
+                spot = grid[row][column]
+            elif pygame.mouse.get_pressed()[2]:
+                return
+
+    pygame.quit()
+
 # continue here
