@@ -76,4 +76,34 @@ class Cell:
         return False
 
 def heuristic(point_1, point_2):
-    return
+    x1, y1 = point_1
+    x2, y2 = point_2
+    return abs(x1 - x2) + abs(y1 - y2)
+
+def make_grid(rows, length):
+    grid = []
+    gap = length // rows
+    for i in range(rows):
+        grid.append(rows)
+        for j in range(rows):
+            cell = Cell(i, j, gap, rows)
+            grid[i].append(cell)
+
+    return grid
+
+def draw_grid(window, rows, length):
+    gap = length // rows
+    for i in range(rows):
+        pygame.draw.line(window, GREY, (0, i * gap), (length, i * gap))
+        for j in range(rows):
+            pygame.draw.line(window, GREY, (j * gap, 0), (j * gap, length))
+
+def draw(window, grid, rows, length):
+    window.fill(WHITE)
+    for cell in rows:
+        cell.draw(window)
+
+    draw_grid(window, rows, length)
+    pygame.display.update()
+
+# continue here
