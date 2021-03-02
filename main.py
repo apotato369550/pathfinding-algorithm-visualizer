@@ -88,7 +88,7 @@ def make_grid(rows, length):
     grid = []
     gap = length // rows
     for i in range(rows):
-        grid.append(rows)
+        grid.append([])
         for j in range(rows):
             cell = Cell(i, j, gap, rows)
             grid[i].append(cell)
@@ -103,10 +103,10 @@ def draw_grid(window, rows, length):
             pygame.draw.line(window, GREY, (j * gap, 0), (j * gap, length))
 
 def draw(window, grid, rows, length):
-    # there is also something wrong here
     window.fill(WHITE)
-    for cell in range(rows):
-        cell.draw(window)
+    for row in grid:
+        for cell in row:
+            cell.draw(window)
 
     draw_grid(window, rows, length)
     pygame.display.update()
@@ -140,6 +140,7 @@ def main(window, length):
                 continue
 
             if pygame.mouse.get_pressed()[0]:
+                # for some reason I can't draw on this grid
                 position = pygame.mouse.get_pos()
                 row, column = get_clicked_position(position, ROWS, length)
                 cell = grid[row][column]
@@ -159,4 +160,7 @@ def main(window, length):
     pygame.quit()
 
 main(WIN, LENGTH)
-# continue here
+# scan line by line side by side w/ tutorial vid for what's wrong.
+# smth about type conversions and interations
+# int instead of list, list instaed of int
+# run to debug
