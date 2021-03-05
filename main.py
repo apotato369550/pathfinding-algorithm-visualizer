@@ -1,4 +1,3 @@
-
 import pygame
 import math
 from queue import PriorityQueue
@@ -21,16 +20,20 @@ TURQUOISE = (64, 224, 208)
 
 class Cell:
     def __init__(self, row, column, length, total_rows):
+        # The problem was here all this godddamn timeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+        # ohhh myyyyyy godddddddd
         self.row = row
         self.column = column
         self.x = row * length
-        self.y = row * length
+        self.y = column * length
         self.color = WHITE
+        self.neighbors = []
         self.length = length
         self.total_rows = total_rows
+        print "cell created"
 
-    def get_postion(self):
-        return self.row, self.color
+    def get_position(self):
+        return self.row, self.column
 
     def is_closed(self):
         return self.color == RED
@@ -48,7 +51,7 @@ class Cell:
         return self.color == PURPLE
 
     def reset(self):
-        self.color == WHITE
+        self.color = WHITE
 
     def make_closed(self):
         self.color = RED
@@ -60,7 +63,9 @@ class Cell:
         self.color = BLACK
 
     def make_start(self):
+        print "startoooo"
         self.color = ORANGE
+        print self.color
 
     def make_end(self):
         self.color = TURQUOISE
@@ -70,6 +75,7 @@ class Cell:
 
     def draw(self, window):
         pygame.draw.rect(window, self.color, (self.x, self.y, self.length, self.length))
+
     # continue here
 
     def update_neighbors(self, grid):
@@ -78,22 +84,30 @@ class Cell:
     def __lt__(self, other):
         return False
 
+
 def heuristic(point_1, point_2):
     x1, y1 = point_1
     x2, y2 = point_2
     return abs(x1 - x2) + abs(y1 - y2)
 
+
 def make_grid(rows, length):
     # there is something wrong here
+    # MY BRAIN HURTS
+    # this aint good for my health my guy
+
+    # it only draws the orange cells then draws the lines
     grid = []
     gap = length // rows
     for i in range(rows):
         grid.append([])
         for j in range(rows):
-            cell = Cell(i, j, gap, rows)
-            grid[i].append(cell)
+            spot = Cell(i, j, gap, rows)
+            grid[i].append(spot)
+
 
     return grid
+
 
 def draw_grid(window, rows, length):
     gap = length // rows
@@ -102,23 +116,34 @@ def draw_grid(window, rows, length):
         for j in range(rows):
             pygame.draw.line(window, GREY, (j * gap, 0), (j * gap, length))
 
+
 def draw(window, grid, rows, length):
+    # i think there's smth wrong here
+    # figure out why it ain't changing colors like why man lmao
+    # figure this out later
     window.fill(WHITE)
     for row in grid:
         for cell in row:
             cell.draw(window)
 
     draw_grid(window, rows, length)
+
+    # this don't work??
     pygame.display.update()
 
+
 def get_clicked_position(position, rows, length):
+    # look into a parsing error
+    # forgot to typecast
+    # column might be a string??
     gap = length // rows
     y, x = position
 
     row = y // gap
-    column = x //gap
+    column = x // gap
 
-    return row, column
+    return int(row), int(column)
+
 
 def main(window, length):
     ROWS = 50
@@ -140,27 +165,23 @@ def main(window, length):
                 continue
 
             if pygame.mouse.get_pressed()[0]:
-                # for some reason I can't draw on this grid
                 position = pygame.mouse.get_pos()
                 row, column = get_clicked_position(position, ROWS, length)
                 cell = grid[row][column]
                 if not start:
                     start = cell
                     start.make_start()
-
                 elif not end:
                     end = cell
                     end.make_end()
-
                 elif cell != end and cell != start:
                     cell.make_barrier()
+
+
             elif pygame.mouse.get_pressed()[2]:
                 pass
 
     pygame.quit()
 
+
 main(WIN, LENGTH)
-# scan line by line side by side w/ tutorial vid for what's wrong.
-# smth about type conversions and interations
-# int instead of list, list instaed of int
-# run to debug
