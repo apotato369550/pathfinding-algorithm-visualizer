@@ -20,8 +20,6 @@ TURQUOISE = (64, 224, 208)
 
 class Cell:
     def __init__(self, row, column, length, total_rows):
-        # The problem was here all this godddamn timeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-        # ohhh myyyyyy godddddddd
         self.row = row
         self.column = column
         self.x = row * length
@@ -30,7 +28,6 @@ class Cell:
         self.neighbors = []
         self.length = length
         self.total_rows = total_rows
-        print "cell created"
 
     def get_position(self):
         return self.row, self.column
@@ -108,7 +105,6 @@ def reconstruct_path(came_from, current, draw):
         draw()
 
 def algorithm(draw, grid, start, end):
-    # not working
     count = 0
     open_set = PriorityQueue()
     open_set.put((0, count, start))
@@ -123,9 +119,6 @@ def algorithm(draw, grid, start, end):
 
     open_set_hash = {start}
 
-    # there is a fatal, fatal bug here
-    # the declarations and the logic in the algorithm function are fine
-    # it just wont update the cells to its right idk why
 
     while not open_set.empty():
         for event in pygame.event.get():
@@ -157,7 +150,6 @@ def algorithm(draw, grid, start, end):
         if current != start:
             current.make_closed()
 
-    print "end false"
     return False
 
 def make_grid(rows, length):
@@ -183,9 +175,6 @@ def draw_grid(window, rows, length):
 
 
 def draw(window, grid, rows, length):
-    # i think there's smth wrong here
-    # figure out why it ain't changing colors like why man lmao
-    # figure this out later
     window.fill(WHITE)
     for row in grid:
         for cell in row:
@@ -193,14 +182,10 @@ def draw(window, grid, rows, length):
 
     draw_grid(window, rows, length)
 
-    # this don't work??
     pygame.display.update()
 
 
 def get_clicked_position(position, rows, length):
-    # look into a parsing error
-    # forgot to typecast
-    # column might be a string??
     gap = length // rows
     y, x = position
 
@@ -218,7 +203,6 @@ def main(window, length):
     end = None
 
     run = True
-    started = False
 
     while run:
         draw(window, grid, ROWS, length)
@@ -255,13 +239,11 @@ def main(window, length):
                         for cell in row:
                             cell.update_neighbors(grid)
                     algorithm(lambda: draw(window, grid, ROWS, length), grid, start, end)
-                    print "eyyyy"
 
                 if event.key == pygame.K_c:
                     start = None
                     end = None
                     grid = make_grid(ROWS, length)
-                # there is smth wrong here
 
 
     pygame.quit()
